@@ -1,5 +1,5 @@
-description: demorp-sample-toolchain
-name: demorp-sample-toolchain
+description: bankingapp-sample-toolchain
+name: bankingapp-sample-toolchain
 sample-build:
   parameters:
     configuration:
@@ -23,7 +23,7 @@ sample-build:
         $CF_APP_NAME | grep urls: | awk '{print $2}')\n      # View logs\n      #cf
         logs \"${CF_APP}\" --recent\n      \n"
       env:
-        CF_APP_NAME: demorp-sample-toolchain
+        CF_APP_NAME: bankingapp-sample-toolchain
         PROD_ORG_NAME: Grace_Organization
         PROD_REGION_ID: ibm:yp:us-south
         PROD_SPACE_NAME: test
@@ -52,7 +52,7 @@ sample-repo:
     label: node-hello-world
     owner_id: Nexsign
     repo_name: node-hello-world
-    repo_url: https://github.com/Nexsign/DemoRP.git
+    repo_url: https://github.com/Nexsign/BankingApp-toolchain.git
     token_url: https://otc-github-public-broker.ng.bluemix.net/github/token
     type: link
   service_id: githubpublic
