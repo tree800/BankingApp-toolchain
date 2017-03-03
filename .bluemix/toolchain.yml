@@ -24,9 +24,9 @@ sample-build:
         logs \"${CF_APP}\" --recent\n      \n"
       env:
         CF_APP_NAME: bankingapp-sample-toolchain
-        PROD_ORG_NAME: Grace_Organization
+        PROD_ORG_NAME: Nexsign
         PROD_REGION_ID: ibm:yp:us-south
-        PROD_SPACE_NAME: test
+        PROD_SPACE_NAME: Nexsign
         SAMPLE_REPO: sample-repo
       execute: true
     name: simple-simple-toolchain
