@@ -52,7 +52,7 @@ sample-repo:
     label: node-hello-world
     owner_id: Nexsign
     repo_name: node-hello-world
-    repo_url: https://github.com/Nexsign/BankingApp-toolchain.git
+    repo_url: https://github.com/Nexsign/DemoRP.git
     token_url: https://otc-github-public-broker.ng.bluemix.net/github/token
     type: link
   service_id: githubpublic
