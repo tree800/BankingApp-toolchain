@@ -4,7 +4,7 @@ sample-build:
   parameters:
     configuration:
       content: "---\nstages:\n- name: BUILD\n  inputs:\n  - type: git\n    branch:
-        develop\n    service: ${SAMPLE_REPO}\n  triggers:\n  - type: commit\n  jobs:\n
+        master\n    service: ${SAMPLE_REPO}\n  triggers:\n  - type: commit\n  jobs:\n
         \ - name: Build\n    type: builder\n- name: DEPLOY\n  inputs:\n  - type: job\n
         \   stage: BUILD\n    job: Build\n  triggers:\n  - type: stage\n  properties:\n
         \ - name: CF_APP_NAME\n    value: undefined\n    type: text\n  - name: APP_URL\n
