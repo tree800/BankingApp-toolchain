@@ -1,64 +1,74 @@
-description: bankingapp-sample-toolchain
-name: bankingapp-sample-toolchain
-sample-build:
-  parameters:
-    configuration:
-      content: "---\nstages:\n- name: BUILD\n  inputs:\n  - type: git\n    branch:
-        master\n    service: ${SAMPLE_REPO}\n  triggers:\n  - type: commit\n  jobs:\n
-        \ - name: Build\n    type: builder\n- name: DEPLOY\n  inputs:\n  - type: job\n
-        \   stage: BUILD\n    job: Build\n  triggers:\n  - type: stage\n  properties:\n
-        \ - name: CF_APP_NAME\n    value: undefined\n    type: text\n  - name: APP_URL\n
-        \   value: undefined\n    type: text\n  jobs:\n  - name: Blue-Green Deploy\n
-        \   type: deployer\n    target:\n      region_id: ${PROD_REGION_ID}\n      organization:
-        ${PROD_ORG_NAME}\n      space: ${PROD_SPACE_NAME}\n      application: ${CF_APP_NAME}\n
-        \   script: |\n      #!/bin/bash\n      # Push app\n      if ! cf app $CF_APP;
-        then  \n        cf push $CF_APP -b java_buildpack -p samplerp-1.0.0.war \n      else\n        OLD_CF_APP=${CF_APP}-OLD-$(date
-        +\"%s\")\n        rollback() {\n          set +e  \n          if cf app $OLD_CF_APP;
-        then\n            cf logs $CF_APP --recent\n            cf delete $CF_APP
-        -f\n            cf rename $OLD_CF_APP $CF_APP\n          fi\n          exit
-        1\n        }\n        set -e\n        trap rollback ERR\n        cf rename
-        $CF_APP $OLD_CF_APP\n        cf push $CF_APP\n        cf delete $OLD_CF_APP
-        -f\n      fi\n      # Export app name and URL for use in later Pipeline jobs\n
-        \     export CF_APP_NAME=\"$CF_APP\"\n      export APP_URL=http://$(cf app
-        $CF_APP_NAME | grep urls: | awk '{print $2}')\n      # View logs\n      #cf
-        logs \"${CF_APP}\" --recent\n      \n"
-      env:
-        CF_APP_NAME: bankingapp-sample-toolchain
-        PROD_ORG_NAME: Nexsign
-        PROD_REGION_ID: ibm:yp:us-south
-        PROD_SPACE_NAME: Demo
-        SAMPLE_REPO: sample-repo
-      execute: true
-    name: simple-simple-toolchain
-    services:
+version: '2'
+default_locale: en
+locales:
+  $ref: locales.yml
+template:
+  name: Simple Cloud Foundry toolchain
+  description: >-
+    With this toolchain, you can develop and deploy a Cloud Foundry application.
+    By default, the toolchain uses a sample application of Relying Party Server for FIDO server, or you
+    can link to your own GitHub repository. This toolchain is preconfigured for
+    continuous delivery, source control, issue tracking, and online editing.
+
+
+    This toolchain uses tools that are part of the Continuous Delivery service.
+    If an instance of that service isn't already in your organization, when you
+    click **Create**, it is automatically added at no cost to you. For more
+    information and terms, see the [Bluemix
+    catalog](/catalog/services/continuous-delivery/).
+
+
+    To get started, click **Create**.
+  header: '![](toolchain.svg?localize "header image")'
+  icon: icon.svg
+  required:
+    - sample-build
     - sample-repo
-    ui-pipeline: true
-  service_id: pipeline
-sample-repo:
-  parameters:
-    api_root_url: https://api.github.com
-    enable_traceability: false
-    # extra_capabilities:
-    # - capability_id: git.issues
-    #   dashboard_url: https://github.com/open-toolchain/node-hello-world/issues
-    #   display_name: Issues
-    #   enabled: true
-    #   label: node-hello-world
-    #   tags:
-    #   - think
-    #   - code
-    # has_issues: true
-    has_issues: false
-    label: node-hello-world
-    owner_id: Nexsign
-    repo_name: node-hello-world
-    repo_url: https://github.com/Nexsign/DemoRP.git
-    token_url: https://otc-github-public-broker.ng.bluemix.net/github/token
-    type: link
-  service_id: githubpublic
-# webide:
-#   parameters:
-#     container_url: ""
-#     dashboard_url: /devops/code/edit/edit.html#,toolchain=c8a68e3d-e682-48e0-84c4-c2d12684bbc3
-#     toolchain_id: c8a68e3d-e682-48e0-84c4-c2d12684bbc3
-#   service_id: orion
+  info:
+    git url: >-
+      [https://github.com/Nexsign/BankingApp-toolchain](https://github.com/Nexsign/BankingApp-toolchain)
+    git branch: >-
+      [master](https://github.com/Nexsign/BankingApp-toolchain/tree/master)
+toolchain:
+  name: 'banking-app-toolchain-{{timestamp}}'
+  template:
+    getting_started: |-
+      **Your toolchain is ready!**
+
+      **Quick start:** Commit a change to the Git repo to trigger a new build and deployment.
+
+      For step-by-step instructions, see the [tutorial](https://www.ibm.com/devops/method/tutorials/tutorial_toolchain_flow?walkthrough_step=0) for this toolchain.
+services:
+  sample-repo:
+    service_id: githubpublic
+    parameters:
+      repo_name: 'banking-app-repo-{{timestamp}}'
+      repo_url: 'https://github.com/Nexsign/DemoRP.git'
+      type: link
+      has_issues: false
+  sample-build:
+    service_id: pipeline
+    parameters:
+      services:
+        - sample-repo
+      name: '{{toolchain.name}}'
+      ui-pipeline: true
+      configuration:
+        content:
+          $ref: pipeline.yml
+          $refType: text
+        env:
+          SAMPLE_REPO: sample-repo
+          CF_APP_NAME: '{{form.pipeline.parameters.prod-app-name}}'
+          PROD_SPACE_NAME: '{{form.pipeline.parameters.prod-space}}'
+          PROD_ORG_NAME: '{{form.pipeline.parameters.prod-organization}}'
+          PROD_REGION_ID: '{{form.pipeline.parameters.prod-region}}'
+        execute: true
+  webide:
+    service_id: orion
+form:
+  pipeline:
+    parameters:
+      prod-app-name: 'banking-app-{{timestamp}}'
+    schema:
+      $ref: deploy.json
