@@ -12,7 +12,7 @@ sample-build:
         \   type: deployer\n    target:\n      region_id: ${PROD_REGION_ID}\n      organization:
         ${PROD_ORG_NAME}\n      space: ${PROD_SPACE_NAME}\n      application: ${CF_APP_NAME}\n
         \   script: |\n      #!/bin/bash\n      # Push app\n      if ! cf app $CF_APP;
-        then  \n        cf push $CF_APP -b java_buildpack -p \n      else\n        OLD_CF_APP=${CF_APP}-OLD-$(date
+        then  \n        cf push $CF_APP -b java_buildpack -p samplerp-1.0.0.war \n      else\n        OLD_CF_APP=${CF_APP}-OLD-$(date
         +\"%s\")\n        rollback() {\n          set +e  \n          if cf app $OLD_CF_APP;
         then\n            cf logs $CF_APP --recent\n            cf delete $CF_APP
         -f\n            cf rename $OLD_CF_APP $CF_APP\n          fi\n          exit
