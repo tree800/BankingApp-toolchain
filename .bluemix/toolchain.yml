@@ -26,7 +26,7 @@ sample-build:
         CF_APP_NAME: bankingapp-sample-toolchain
         PROD_ORG_NAME: Nexsign
         PROD_REGION_ID: ibm:yp:us-south
-        PROD_SPACE_NAME: Nexsign
+        PROD_SPACE_NAME: Demo
         SAMPLE_REPO: sample-repo
       execute: true
     name: simple-simple-toolchain
