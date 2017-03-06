@@ -42,7 +42,7 @@ stages:
       #!/bin/bash
       # Push app
       if ! cf app $CF_APP; then  
-        cf push $CF_APP -b java_buildpack -p samplerp-1.0.0.war 
+        cf push $CF_APP -b java_buildpack -p samplerp-1.0.0.war -m 512M
       else
         OLD_CF_APP=${CF_APP}-OLD-$(date +"%s")
         rollback() {
@@ -57,7 +57,7 @@ stages:
         set -e
         trap rollback ERR
         cf rename $CF_APP $OLD_CF_APP
-        cf push $CF_APP -b java_buildpack -p samplerp-1.0.0.war 
+        cf push $CF_APP -b java_buildpack -p samplerp-1.0.0.war -m 512M
         cf delete $OLD_CF_APP -f
       fi
       # Export app name and URL for use in later Pipeline jobs
