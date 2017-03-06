@@ -30,7 +30,7 @@ template:
     git branch: >-
       [master](https://github.com/Nexsign/BankingApp-toolchain/tree/master)
 toolchain:
-  name: 'banking-app-toolchain-{{timestamp}}'
+  name: 'myBankingService-toolchain-{{timestamp}}'
   template:
     getting_started: |-
       **Your toolchain is ready!**
@@ -42,7 +42,7 @@ services:
   sample-repo:
     service_id: githubpublic
     parameters:
-      repo_name: 'banking-app-repo-{{timestamp}}'
+      repo_name: 'myBankingService-repo-{{timestamp}}'
       repo_url: 'https://github.com/Nexsign/DemoRP.git'
       type: link
       has_issues: false
