@@ -43,7 +43,7 @@ services:
     service_id: githubpublic
     parameters:
       repo_name: 'myBankingService-repo-{{timestamp}}'
-      repo_url: 'https://github.com/Nexsign/DemoRP.git'
+      repo_url: 'https://github.com/Nexsign/BankingApp.git'
       type: link
       has_issues: false
   sample-build:
