@@ -3,7 +3,7 @@ default_locale: en
 locales:
   $ref: locales.yml
 template:
-  name: Simple Cloud Foundry toolchain
+  name: Relying Party Service for Nexsign Toolchain
   description: >-
     With this toolchain, you can develop and deploy a Cloud Foundry application.
     By default, the toolchain uses a sample application of Relying Party Server for FIDO server, or you
